@@ -3,12 +3,16 @@ setwd("/Users/jonasrauser/Desktop/R/Comparison-of-different-Rt-Estimates-from-wa
 
 
 ### Load Data
+
 cohort_raw <- read.csv("cohortData_RLP.csv", header = T, sep = ";")
 wastewater_raw <- read.csv("completeData_RLP.csv", header = T, sep = ";")
 hospitalizations_raw <- read.csv("Hospitalisierungen.csv", header = T, sep = ",")%>%
   filter(Bundesland == "Rheinland-Pfalz")
 
+
+
 ### Clean Data
+
 # Remove all irrelevant features
 wastewater_cleaned <- wastewater_raw %>%
   select(-"X", -"Kläranlagen.ID", -"Probenbegleitschein.vollständig", -"Niederschläge.am.Vortag.der.Probenentnahme..mm.", 
@@ -22,6 +26,7 @@ hospitalizations_cleaned <- hospitalizations_raw %>%
   select(-Altersgruppe, -Bundesland_Id) %>% 
   group_by(Datum) %>% 
   summarise(Fallzahlen = sum(X7T_Hospitalisierung_Faelle, na.rm = TRUE))
+hospitalizations_cleaned$Datum <- as.Date(hospitalizations_cleaned$Datum, format = "%Y-%m-%d")
 
 
 # Similar thing for cohort-Study-data :) 
@@ -31,3 +36,10 @@ cohort_clenaed <- cohort_raw %>%
   summarise(Valid.test = sum(Valid.test, na.rm = TRUE), 
             Positive.test = sum(Positive.test, na.rm = TRUE),
             Newly.positive.test = sum(Newly.positive.test, na.rm = TRUE))
+
+
+##### Function to get the same time-span on all datasets
+
+#alignTimespan <- function(df, time_start, time_end){
+  
+#}
