@@ -7,6 +7,9 @@ library(tidyverse)
 # Load Data
 cohortData_raw <- read.csv("cohortData_RLP.csv", header = T, sep = ";")
 completeData_raw <- read.csv("completeData_RLP.csv", header = T, sep = ";")
+hospitalisierungen_raw <- read.csv("Hospitalisierungen.csv", header = T, sep = ",")%>%
+  filter(Bundesland == "Rheinland-Pfalz")
+
 
 # remove all unnecessary data-features
 completeData_relVar <- completeData_raw %>%
