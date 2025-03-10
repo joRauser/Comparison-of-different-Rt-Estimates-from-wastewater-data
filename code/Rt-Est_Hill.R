@@ -179,9 +179,9 @@ rt_function_unknown_si <- function(dataframe, weekly, mean_SI){
   
 }
 
-l <- rt_function_unknown_si(hospitalizations_cleaned, "Yes", 4)
-
-
+rt_hospitalizations <- rt_function_unknown_si(hospitalizations_cleaned, "Yes", 4)
+rt_cohortstudy <- rt_function_unknown_si(cohort_cleaned, "Yes", 4)
+# Cohortstudy nicht ausreichend an Daten. Wie lösen? 
 
 
 
