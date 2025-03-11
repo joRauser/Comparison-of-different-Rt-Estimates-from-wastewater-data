@@ -100,8 +100,8 @@ rt_function_unknown_si <- function(dataframe, weekly, mean_SI, meanSpan_SI, std_
   } else if(weekly == "No"){
     
     # change name of case data column
-    colnames(dataframe)[2] <- "case_data"
-    colnames(dataframe)[1] <- "Date"
+  #  colnames(dataframe)[2] <- "case_data"
+  #  colnames(dataframe)[1] <- "Date"
     
     # fill in missing dates
   #  dataframe <- dataframe %>%
@@ -184,7 +184,7 @@ rt_function_unknown_si <- function(dataframe, weekly, mean_SI, meanSpan_SI, std_
 ### Gold Standard:
 rt_hospitalizations <- rt_function_unknown_si(hospitalizations_aligned, "Yes", 4, 3, 1, .9)
 #rt_hospitalizations <- rt_function_unknown_si(hospitalizations_aligned, "No", 4)
-
+rt_hosp_conv <- rt_function_unknown_si(hosp_conv_aligned, "No", 4, 3, 1, .9)
 ### CohortStudy
 # Is okayish, but very interesting because here, just the valid tests are observed
 rt_cohortstudy <- rt_function_unknown_si(cohort_aligned, "Yes", 4, 3, 1, .9)

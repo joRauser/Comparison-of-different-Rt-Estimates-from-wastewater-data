@@ -10,13 +10,17 @@ cohort_raw <- read.csv("cohortData_RLP.csv", header = T, sep = ";")%>%
 
 wastewater_raw <- read.csv("completeData_RLP.csv", header = T, sep = ";")%>%
   rename(Date = Datum.der.Entnahme)%>%
-  filter(Probe.Valide == " ja") #  ! Leerzeichen for "ja" ! 
+  filter(Probe.Valide == " ja") #  ! whitespace before "ja"
 
+# 7-day/weekly hospitalization incidence:
 hospitalizations_raw <- read.csv("Hospitalisierungen.csv", header = T, sep = ",")%>%
   filter(Bundesland == "Rheinland-Pfalz")%>%
   rename(Date = Datum)
 
-
+# daily hospitalization incidence
+hospitalzations_deconvoluted <- read.csv("hospitalization_deconvoluted.csv", head = T) %>%
+  filter(location == "DE-RP") %>%
+  rename(Date = date)
 
 ### Clean Data
 
@@ -34,7 +38,11 @@ wastewater_cleaned <- wastewater_raw %>%
   summarise(genCopiesAvg = sum(Genkopien.im.Durchschnitt..Gq.ml., na.rm = TRUE),
             genCopiesN1 = sum(Genkopien.N1.ml, na.rm = TRUE),
             genCopiesN2 = sum(Genkopien.N2.ml, na.rm = TRUE),
-            genCopiesToPMMoV = sum(Anteil.Genkopien.Durchschnitt.zu.PMMoV.x100.000, na.rm = TRUE))
+            genCopiesToPMMoV = sum(Anteil.Genkopien.Durchschnitt.zu.PMMoV.x100.000, na.rm = TRUE))%>%
+  # qqplot(wastewater_cleaned$genCopiesN1, wastewater_cleaned$genCopiesN2) leads to the conclusion, 
+  # that setting both parameters in different estimates, doesnt give any value. 
+  mutate(genCopiesN1_N2 = genCopiesN1 + genCopiesN2) %>%
+  select(-genCopiesN1, -genCopiesN2)
 
 wastewater_cleaned$Date <- as.Date(wastewater_cleaned$Date, format = "%Y-%m-%d")
 
@@ -48,6 +56,12 @@ hospitalizations_cleaned <- hospitalizations_raw %>%
 
 hospitalizations_cleaned$Date <- as.Date(hospitalizations_cleaned$Date, format = "%Y-%m-%d")
 
+hospitalizations_deconvoluted_cleaned <- hospitalzations_deconvoluted %>%
+  select(-location, -age_group) %>%
+  group_by(Date) %>%
+  summarise(Hospitalizations = sum(value, na.rm = TRUE))
+
+hospitalizations_deconvoluted_cleaned$Date <- as.Date(hospitalizations_deconvoluted_cleaned$Date, format = "%Y-%m-%d")
 
 ## SentiSurv-data
 cohort_cleaned <- cohort_raw %>%
@@ -74,7 +88,8 @@ alignTimespan <- function(df){
 #  df %>% filter(Date >= as.Date("2023-01-01") & Date <= as.Date("2023-10-01"))
   colnames(df)[2] <- "case_data"
   df <- df %>%
-    filter(Date >= as.Date("2023-01-01") & Date <= as.Date("2023-10-01")) %>%
+   # filter(Date >= as.Date("2023-01-01") & Date <= as.Date("2023-10-01")) %>%
+    filter(Date >= as.Date("2023-01-15") & Date <= as.Date("2023-10-01")) %>%
     # fill in missing dates
     complete(Date = seq.Date(min(Date), max(Date), by = "day")) %>%
     # interpolate missing values
@@ -84,6 +99,8 @@ alignTimespan <- function(df){
 }
 
 hospitalizations_aligned <- alignTimespan(hospitalizations_cleaned)
+hosp_conv_aligned <- alignTimespan(hospitalizations_deconvoluted_cleaned)
+
 
 wastewater_aligned <- alignTimespan(wastewater_cleaned)
 wastewater_toPMMoV <- alignTimespan(wastewater_cleaned %>%

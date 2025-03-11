@@ -9,6 +9,10 @@ datasets <- list(
   "Wastewater" = wastewater_toPMMoV,
   "CohortStudy" = cohortPosTest
 )
+datasets <- list(
+  "Hospitalizations_Weekly" = hospitalizations_aligned,
+  "Hospitalizations_Daily" = hosp_conv_aligned
+)
 
 # Parameter für die rt_function_unknown_si -> Parameter dann für alle Estimates gleich! 
 params <- list(
