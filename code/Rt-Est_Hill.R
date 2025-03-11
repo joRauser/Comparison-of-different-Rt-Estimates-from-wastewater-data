@@ -5,7 +5,7 @@ library(zoo)
 ## Comparison value - Rt from case data using EpiEstim method
 
 ### RT FUNCTION WITH UNKNOWN SI
-rt_function_unknown_si <- function(dataframe, weekly, mean_SI){
+rt_function_unknown_si <- function(dataframe, weekly, mean_SI, meanSpan_SI, std_SI, stdSpan_SI){
   
   if(weekly == "Yes"){
     
@@ -15,8 +15,8 @@ rt_function_unknown_si <- function(dataframe, weekly, mean_SI){
     t_end <- t_start + 6 # adding 6 to get 7-day windows as bounds included in window
     
     # change name of case data column
-    colnames(dataframe)[2] <- "case_data"
-    colnames(dataframe)[1] <- "Date"
+ #   colnames(dataframe)[2] <- "case_data"
+  #  colnames(dataframe)[1] <- "Date"
     
     # fill in missing dates
   #  dataframe <- dataframe %>%
@@ -33,18 +33,20 @@ rt_function_unknown_si <- function(dataframe, weekly, mean_SI){
     serial_interval <- make_config(
       incid = dataframe$I,
       method = c("uncertain_si"),
-      mean_si = 4,
-     # mean_si = mean_SI,
-      std_si = 1,
+     # mean_si = 4,
+      mean_si = mean_SI,
+     # std_si = 1,
+      std_si = std_SI,
       std_mean_si = 1,
-      min_mean_si = 1,
-     # max_mean_si = 10,
-      max_mean_si = 7,
+     # min_mean_si = 1,
+     # max_mean_si = 7,
+      min_mean_si = mean_SI - meanSpan_SI,
+      max_mean_si = mean_SI + meanSpan_SI,
       std_std_si = 1,
-     # min_std_si = 1,
-     # max_std_si = 5,
-      min_std_si = .1,
-      max_std_si = 1.9,
+     # min_std_si = .1,
+     # max_std_si = 1.9,
+       min_std_si = std_SI - stdSpan_SI,
+       max_std_si = std_SI + stdSpan_SI,
       t_start = t_start,
       t_end = t_end
     )
@@ -180,17 +182,17 @@ rt_function_unknown_si <- function(dataframe, weekly, mean_SI){
 }
 
 ### Gold Standard:
-rt_hospitalizations <- rt_function_unknown_si(hospitalizations_aligned, "Yes", 4)
+rt_hospitalizations <- rt_function_unknown_si(hospitalizations_aligned, "Yes", 4, 3, 1, .9)
 #rt_hospitalizations <- rt_function_unknown_si(hospitalizations_aligned, "No", 4)
 
 ### CohortStudy
 # Is okayish, but very interesting because here, just the valid tests are observed
-rt_cohortstudy <- rt_function_unknown_si(cohort_aligned, "Yes", 4)
+rt_cohortstudy <- rt_function_unknown_si(cohort_aligned, "Yes", 4, 3, 1, .9)
 # Not good at all :D (only the peaks are recognizalbe with a lot of imagination)
 # Also the KI's are very large 
-rt_cohortInf <- rt_function_unknown_si(cohortInfRate_aligned, "Yes", 4)
+rt_cohortInf <- rt_function_unknown_si(cohortInfRate_aligned, "Yes", 4, 3, 1, .9)
 # Pretty good
-rt_cohortPos <- rt_function_unknown_si(cohortPosTest_aligned, "Yes", 4)
+rt_cohortPos <- rt_function_unknown_si(cohortPosTest_aligned, "Yes", 4, 3, 1, .9)
 
 # -> As expected, the number of positiveTests works best, to estimate Rt
 
@@ -198,7 +200,7 @@ rt_cohortPos <- rt_function_unknown_si(cohortPosTest_aligned, "Yes", 4)
 ### Wastewater:
 ## Direct substitution:
 # Incidence = Virus to PMMoV:
-rt_wastewater_toPMMoV <- rt_function_unknown_si(wastewater_toPMMoV, "Yes", 4)
+rt_wastewater_toPMMoV <- rt_function_unknown_si(wastewater_toPMMoV, "Yes", 4, 3, 1, .9)
 
 ggplot()+
   geom_line(data = dat_curve, aes(x = date, y = mean_rt))
