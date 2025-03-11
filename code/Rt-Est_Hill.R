@@ -19,12 +19,12 @@ rt_function_unknown_si <- function(dataframe, weekly, mean_SI){
     colnames(dataframe)[1] <- "Date"
     
     # fill in missing dates
-    dataframe <- dataframe %>%
-      complete(Date = seq.Date(min(Date), max(Date), by = "day")
-      ) %>%
-      mutate(I = na.approx(case_data) # interpolate missing values
-      ) %>% 
-      dplyr::select(Date, I)
+  #  dataframe <- dataframe %>%
+  #    complete(Date = seq.Date(min(Date), max(Date), by = "day")
+  #    ) %>%
+  #    mutate(I = na.approx(case_data) # interpolate missing values
+  #    ) %>% 
+  #    dplyr::select(Date, I)
     
     # column names change
     colnames(dataframe) <- c("dates", "I")
@@ -102,12 +102,12 @@ rt_function_unknown_si <- function(dataframe, weekly, mean_SI){
     colnames(dataframe)[1] <- "Date"
     
     # fill in missing dates
-    dataframe <- dataframe %>%
-      complete(Date = seq.Date(min(Date), max(Date), by = "day")
-      ) %>%
-      mutate(I = na.approx(case_data) # interpolate missing values
-      ) %>% 
-      dplyr::select(Date, I)
+  #  dataframe <- dataframe %>%
+  #    complete(Date = seq.Date(min(Date), max(Date), by = "day")
+  #    ) %>%
+  #    mutate(I = na.approx(case_data) # interpolate missing values
+  #    ) %>% 
+  #    dplyr::select(Date, I)
     
     # column names change
     colnames(dataframe) <- c("dates", "I")
@@ -179,15 +179,26 @@ rt_function_unknown_si <- function(dataframe, weekly, mean_SI){
   
 }
 
-rt_hospitalizations <- rt_function_unknown_si(hospitalizations_cleaned, "Yes", 4)
-rt_cohortstudy <- rt_function_unknown_si(cohort_cleaned, "Yes", 4)
-# Cohortstudy nicht ausreichend an Daten. Wie lösen? 
+### Gold Standard:
+rt_hospitalizations <- rt_function_unknown_si(hospitalizations_aligned, "Yes", 4)
+#rt_hospitalizations <- rt_function_unknown_si(hospitalizations_aligned, "No", 4)
+
+### CohortStudy
+# Is okayish, but very interesting because here, just the valid tests are observed
+rt_cohortstudy <- rt_function_unknown_si(cohort_aligned, "Yes", 4)
+# Not good at all :D (only the peaks are recognizalbe with a lot of imagination)
+# Also the KI's are very large 
+rt_cohortInf <- rt_function_unknown_si(cohortInfRate_aligned, "Yes", 4)
+# Pretty good
+rt_cohortPos <- rt_function_unknown_si(cohortPosTest_aligned, "Yes", 4)
+
+# -> As expected, the number of positiveTests works best, to estimate Rt
 
 
-
-# we want one epidemic curve: Nov 2023 to Feb 1 2024
-dat_curve <- l %>%
-  filter(date >= "2024-01-01" & date <= "2024-12-31")
+### Wastewater:
+## Direct substitution:
+# Incidence = Virus to PMMoV:
+rt_wastewater_toPMMoV <- rt_function_unknown_si(wastewater_toPMMoV, "Yes", 4)
 
 ggplot()+
   geom_line(data = dat_curve, aes(x = date, y = mean_rt))

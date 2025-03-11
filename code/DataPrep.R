@@ -1,4 +1,5 @@
 library(tidyverse)
+library(zoo)
 setwd("/Users/jonasrauser/Desktop/R/Comparison-of-different-Rt-Estimates-from-wastewater-data/rawData")
 
 
@@ -55,18 +56,39 @@ cohort_cleaned <- cohort_raw %>%
   summarise(Valid.test = sum(Valid.test, na.rm = TRUE), 
             Positive.test = sum(Positive.test, na.rm = TRUE),
             Newly.positive.test = sum(Newly.positive.test, na.rm = TRUE)) %>%
-  mutate(infectiousRate = (Positive.test + Newly.positive.test)/Valid.test) %>%
-  select(Date, infectiousRate)
+  mutate(infectiousRate = (Positive.test + Newly.positive.test)/Valid.test)
 
 cohort_cleaned$Date <- as.Date(cohort_cleaned$Date, format = "%Y-%m-%d")
 
+# Try different features of cohortStudy, to infere for Rt:
+cohortInfRate <- cohort_cleaned %>%
+  select(Date, infectiousRate)
+
+cohortPosTest <- cohort_cleaned %>%
+  mutate(positiveTests = Positive.test + Newly.positive.test) %>%
+  select(Date, positiveTests)
+
 
 ##### Function to set time-span on all datasets (is the maximal timespan, where data is available on every dataset)
-
 alignTimespan <- function(df){
-  df %>% filter(Date >= as.Date("2023-01-01") & Date <= as.Date("2023-10-01"))
+#  df %>% filter(Date >= as.Date("2023-01-01") & Date <= as.Date("2023-10-01"))
+  colnames(df)[2] <- "case_data"
+  df <- df %>%
+    filter(Date >= as.Date("2023-01-01") & Date <= as.Date("2023-10-01")) %>%
+    # fill in missing dates
+    complete(Date = seq.Date(min(Date), max(Date), by = "day")) %>%
+    # interpolate missing values
+    mutate(I = na.approx(case_data)) %>% 
+    dplyr::select(Date, I)
+  return(df)
 }
 
-alignTimespan(wastewater_cleaned)
-alignTimespan(hospitalizations_cleaned)
-alignTimespan(cohort_cleaned)
+hospitalizations_aligned <- alignTimespan(hospitalizations_cleaned)
+
+wastewater_aligned <- alignTimespan(wastewater_cleaned)
+wastewater_toPMMoV <- alignTimespan(wastewater_cleaned %>%
+                                      select(Date, genCopiesToPMMoV))
+
+cohort_aligned <- alignTimespan(cohort_cleaned)
+cohortInfRate_aligned <- alignTimespan(cohortInfRate)
+cohortPosTest_aligned <- alignTimespan(cohortPosTest)
