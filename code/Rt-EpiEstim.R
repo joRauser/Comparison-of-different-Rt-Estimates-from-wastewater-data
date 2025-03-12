@@ -22,9 +22,9 @@ rt_unknown_si <- function(dataframe, weekly){
      # mean_si = 4,
       mean_si = 5,
      # std_si = 1,
-      std_si = 1,
+      std_si = 3,
     #  std_mean_si = 1,
-      std_mean_si = 3,
+      std_mean_si = 1,
      # min_mean_si = 1,
      # max_mean_si = 7,
       min_mean_si = 3,
@@ -87,8 +87,8 @@ rt_unknown_si <- function(dataframe, weekly){
       incid = dataframe$I,
       method = c("uncertain_si"),
       mean_si = 5,
-      std_si = 1,
-      std_mean_si = 3,
+      std_si = 3,
+      std_mean_si = 1,
       min_mean_si = 3,
       max_mean_si = 7,
       std_std_si = 1,
@@ -149,6 +149,6 @@ rt_cohortPos <- rt_unknown_si(cohortPosTest_aligned, "Yes")
 ### Wastewater:
 ## Direct substitution:
 # Incidence = Virus to PMMoV:
-rt_wastewater_toPMMoV <- rt_unknown_si(wastewater_toPMMoV, "Yes", 4, 3, 1, .9)
+rt_wastewater_toPMMoV <- rt_unknown_si(wastewater_toPMMoV, "Yes")
 
 

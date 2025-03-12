@@ -1,16 +1,7 @@
 # ToDos
 
-## 0 -> Done
-# Use deconvoluted data 
-
-## 0.1 
-# write plot as function and give the parameters with it
-
 ## 1 
 # -> Use another model (not EpiEstim) which is destined for wastewater data
-
-## 2
-# Code simple Metrics(MAE, MSE) to compare the different estimates to the Hospitalization data
 
 ## 3
 # Build in the delays of data (zB "Melde-delay", Abwasserdelay) -> Datengetrieben:
@@ -38,3 +29,13 @@
 
 # Wichtig bei der Seminararbeit: Inhalt, bildliche und sinnvolle Darstellung und Niederschrift 
 # und schlüssige Analyse und Formulierung der Fragestellung
+
+
+
+
+# Fragen Bracher
+# 1.) Bessere Methode bei MLE?
+# 2.) Sollen Werte ohne Timeshift mit denen mit Timeshift verglichen werden?
+# 2.2) Wie genau soll darauf in der Arbeit eingegangen werden? Soll beides auch jeweils geplottet werden?
+
+# 3.) Fehlersuche :) Warum wird timeshift nicht übernommen?

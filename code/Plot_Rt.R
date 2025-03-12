@@ -1,5 +1,4 @@
-library(ggplot2)
-library(dplyr)
+library(tidyverse)
 library(patchwork)
 
 
@@ -17,7 +16,7 @@ datasets <- list(
 
 # Parameter für die rt_unknown_si -> Parameter dann für alle Estimates gleich! 
 params <- list(
-  weekly = "Yes",
+  weekly = "Yes"
 )
 
 
@@ -26,7 +25,7 @@ params <- list(
 results <- lapply(names(datasets), function(name) {
   rt_data <- rt_unknown_si(
     dataframe = datasets[[name]],
-    weekly = params$weekly,
+    weekly = params$weekly
   )
   rt_data <- rt_data %>%
     mutate(Source = name) 
