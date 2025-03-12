@@ -39,11 +39,8 @@ wastewater_cleaned <- wastewater_raw %>%
             genCopiesN1 = sum(Genkopien.N1.ml, na.rm = TRUE),
             genCopiesN2 = sum(Genkopien.N2.ml, na.rm = TRUE),
             genCopiesToPMMoV = sum(Anteil.Genkopien.Durchschnitt.zu.PMMoV.x100.000, na.rm = TRUE))%>%
-  # qqplot(wastewater_cleaned$genCopiesN1, wastewater_cleaned$genCopiesN2) leads to the conclusion, 
-  # that setting both parameters in different estimates, doesnt give any value. 
   mutate(genCopiesN1_N2 = genCopiesN1 + genCopiesN2) %>%
   select(-genCopiesN1, -genCopiesN2)
-
 wastewater_cleaned$Date <- as.Date(wastewater_cleaned$Date, format = "%Y-%m-%d")
 
 
@@ -53,14 +50,13 @@ hospitalizations_cleaned <- hospitalizations_raw %>%
   # summarize per Date
   group_by(Date) %>% 
   summarise(Fallzahlen = sum(X7T_Hospitalisierung_Faelle, na.rm = TRUE))
-
 hospitalizations_cleaned$Date <- as.Date(hospitalizations_cleaned$Date, format = "%Y-%m-%d")
+
 
 hospitalizations_deconvoluted_cleaned <- hospitalzations_deconvoluted %>%
   select(-location, -age_group) %>%
   group_by(Date) %>%
   summarise(Hospitalizations = sum(value, na.rm = TRUE))
-
 hospitalizations_deconvoluted_cleaned$Date <- as.Date(hospitalizations_deconvoluted_cleaned$Date, format = "%Y-%m-%d")
 
 ## SentiSurv-data
@@ -71,8 +67,8 @@ cohort_cleaned <- cohort_raw %>%
             Positive.test = sum(Positive.test, na.rm = TRUE),
             Newly.positive.test = sum(Newly.positive.test, na.rm = TRUE)) %>%
   mutate(infectiousRate = (Positive.test + Newly.positive.test)/Valid.test)
-
 cohort_cleaned$Date <- as.Date(cohort_cleaned$Date, format = "%Y-%m-%d")
+
 
 # Try different features of cohortStudy, to infere for Rt:
 cohortInfRate <- cohort_cleaned %>%
@@ -85,10 +81,10 @@ cohortPosTest <- cohort_cleaned %>%
 
 ##### Function to set time-span on all datasets (is the maximal timespan, where data is available on every dataset)
 alignTimespan <- function(df){
-#  df %>% filter(Date >= as.Date("2023-01-01") & Date <= as.Date("2023-10-01"))
   colnames(df)[2] <- "case_data"
   df <- df %>%
    # filter(Date >= as.Date("2023-01-01") & Date <= as.Date("2023-10-01")) %>%
+    # -> Cutted out the dates from 2023-01-01 to 2023-01-15 bcs of to high variance of holidays
     filter(Date >= as.Date("2023-01-15") & Date <= as.Date("2023-10-01")) %>%
     # fill in missing dates
     complete(Date = seq.Date(min(Date), max(Date), by = "day")) %>%

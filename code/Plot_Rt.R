@@ -3,7 +3,7 @@ library(dplyr)
 library(patchwork)
 
 
-# Beispiel für mehrere Datensätze
+# Set datasets for Plotting here
 datasets <- list(
   "Hospitalizations" = hospitalizations_aligned,
   "Wastewater" = wastewater_toPMMoV,
@@ -14,24 +14,19 @@ datasets <- list(
   "Hospitalizations_Daily" = hosp_conv_aligned
 )
 
-# Parameter für die rt_function_unknown_si -> Parameter dann für alle Estimates gleich! 
+
+# Parameter für die rt_unknown_si -> Parameter dann für alle Estimates gleich! 
 params <- list(
   weekly = "Yes",
-  mean_SI = 4,
-  meanSpan_SI = 3,
-  std_SI = 1,
-  stdSpan_SI = 0.9
 )
+
+
 
 # Ergebnisse für alle Datensätze speichern
 results <- lapply(names(datasets), function(name) {
-  rt_data <- rt_function_unknown_si(
+  rt_data <- rt_unknown_si(
     dataframe = datasets[[name]],
     weekly = params$weekly,
-    mean_SI = params$mean_SI,
-    meanSpan_SI = params$meanSpan_SI,
-    std_SI = params$std_SI,
-    stdSpan_SI = params$stdSpan_SI
   )
   rt_data <- rt_data %>%
     mutate(Source = name) 

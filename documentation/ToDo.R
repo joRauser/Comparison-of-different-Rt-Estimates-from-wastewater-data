@@ -3,10 +3,10 @@
 ## 0 -> Done
 # Use deconvoluted data 
 
-## 0.1
+## 0.1 
 # write plot as function and give the parameters with it
+
 ## 1 
-# Get knowledge, of how to use the wastewaterdata on EpiEstim
 # -> Use another model (not EpiEstim) which is destined for wastewater data
 
 ## 2

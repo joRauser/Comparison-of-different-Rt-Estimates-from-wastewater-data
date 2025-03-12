@@ -39,3 +39,15 @@ result <- find_time_shift_mle(rt_hospitalizations$mean_rt, rt_cohortPos$mean_rt)
 # Ergebnisse ausgeben
 cat("Best timeshift:", result$best_shift, "days, with MSE of", result$best_mse)
 
+
+
+# Shift Dataset:
+# Shift the timestamps of the cleaned data first, align it and use rt_function again. Then prove by calculating the mse
+shiftData <- function(data, shift){
+  shifteddata <- data
+  shifteddata$Date <- shifteddata$Date + shift
+  return(shifteddata)
+}
+
+cohort_shiftTest2 <- shiftData(cohort_cleaned, result$best_shift)
+
