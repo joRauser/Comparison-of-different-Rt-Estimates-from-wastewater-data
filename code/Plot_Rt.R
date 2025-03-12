@@ -4,36 +4,35 @@ library(patchwork)
 
 # Set datasets for Plotting here
 datasets <- list(
-  "Hospitalizations" = hospitalizations_aligned,
-  "Wastewater" = wastewater_toPMMoV,
-  "CohortStudy" = cohortPosTest
+  "Hospitalizations" = rt_hospitalizations,
+  "Wastewater" = rt_wastewater_toPMMoV,
+  "CohortStudy" = rt_cohortPos
 )
 datasets <- list(
   "Hospitalizations_Weekly" = hospitalizations_aligned,
   "Hospitalizations_Daily" = hosp_conv_aligned
 )
 
+datasets <- list(
+  "WW_EpiEstim" = rt_wastewater_toPMMoV, 
+  "WW_EPCR" = rt_expo
+)
 
-# Parameter für die rt_unknown_si -> Parameter dann für alle Estimates gleich! 
-params <- list(
-  weekly = "Yes"
+datasets <- list(
+  "Hosp_Daily" = rt_hosp_conv, 
+  "WW_EPCR_Daily" = rt_expo
 )
 
 
-
-# Ergebnisse für alle Datensätze speichern
 results <- lapply(names(datasets), function(name) {
-  rt_data <- rt_unknown_si(
-    dataframe = datasets[[name]],
-    weekly = params$weekly
-  )
-  rt_data <- rt_data %>%
+  rt_data <- datasets[[name]] %>%
     mutate(Source = name) 
   return(rt_data)
 })
 
 # Combine results
 combined_results <- bind_rows(results)
+
 
 # create plot
 plot_combined <- ggplot(combined_results, aes(x = date, color = Source)) +

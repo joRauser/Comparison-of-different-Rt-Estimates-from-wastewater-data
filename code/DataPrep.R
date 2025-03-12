@@ -83,8 +83,6 @@ cohortPosTest <- cohort_cleaned %>%
 alignTimespan <- function(df){
   colnames(df)[2] <- "case_data"
   df <- df %>%
-   # filter(Date >= as.Date("2023-01-01") & Date <= as.Date("2023-10-01")) %>%
-    # -> Cutted out the dates from 2023-01-01 to 2023-01-15 bcs of to high variance of holidays
     filter(Date >= as.Date("2023-01-15") & Date <= as.Date("2023-10-01")) %>%
     # fill in missing dates
     complete(Date = seq.Date(min(Date), max(Date), by = "day")) %>%
