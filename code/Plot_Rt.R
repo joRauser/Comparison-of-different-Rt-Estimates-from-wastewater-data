@@ -57,6 +57,12 @@ wwModel_comparison <- print_plot(list(
   "WW_EPCR" = rt_expo
 ))
 
+Model_comparison <- print_plot(list(
+  "WW_EpiEstim" = rt_wastewater_toPMMoV, 
+  "WW_EPCR" = rt_expo,
+  "Hospitalizations" = rt_hosp_conv
+))
+
 dailyValuesEPCR <- print_plot(list(
   "Hosp_Daily" = rt_hosp_conv, 
   "WW_EPCR_Daily" = rt_expo

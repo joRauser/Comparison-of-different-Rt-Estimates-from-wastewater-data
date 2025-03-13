@@ -39,3 +39,9 @@ tendency_check(rt_hospitalizations, rt_cohortPos)
 # 86,11%
 tendency_check(rt_hospitalizations, rt_wastewater_toPMMoV)
 # 67,57%
+
+
+combined_dataset <- merge(rt_hosp_conv, rt_expo, by = "date") %>%
+  drop_na()
+mse(combined_dataset$mean_rt.x, combined_dataset$mean_rt.y)
+mae(combined_dataset$mean_rt.x, combined_dataset$mean_rt.y)

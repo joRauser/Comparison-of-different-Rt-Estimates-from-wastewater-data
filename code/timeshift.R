@@ -80,3 +80,30 @@ cat("Best timeshift:", result$best_shift, "days, with MSE of", result$best_mse)
 
 wastewater_shifted <- shiftData(wastewater_shifted, result$best_shift)
 
+
+result <- find_time_shift_mle(combined_dataset$mean_rt.x, combined_dataset$mean_rt.y)
+cat("Best timeshift:", result$best_shift, "days, with MSE of", result$best_mse)
+
+
+
+
+
+
+# new approach: merge data first:
+result <- find_time_shift_mle(merge(rt_hospitalizations%>%select(-week), 
+                                    rt_wastewater_toPMMoV%>%select(-week), by = "date")
+                              $mean_rt.x, 
+                              merge(rt_hospitalizations%>%select(-week), 
+                                    rt_wastewater_toPMMoV%>%select(-week), by = "date")
+                              $mean_rt.y)
+cat("Best timeshift:", result$best_shift, "days, with MSE of", result$best_mse)
+
+# can only compare with timeshift nearest to 7 (bcs of weekly data and the merger)
+
+result <- find_time_shift_mle(merge(rt_hospitalizations%>%select(-week), 
+                                    rt_wastewater_shifted%>%select(-week), by = "date")
+                              $mean_rt.x, 
+                              merge(rt_hospitalizations%>%select(-week), 
+                                    rt_wastewater_shifted%>%select(-week), by = "date")
+                              $mean_rt.y)
+

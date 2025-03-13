@@ -16,6 +16,7 @@ wastewater_raw <- read.csv("completeData_RLP.csv", header = T, sep = ";")%>%
 hospitalizations_raw <- read.csv("Hospitalisierungen.csv", header = T, sep = ",")%>%
   filter(Bundesland == "Rheinland-Pfalz")%>%
   rename(Date = Datum)
+# https://zenodo.org/records/14997838
 
 # daily hospitalization incidence
 hospitalzations_deconvoluted <- read.csv("hospitalization_deconvoluted.csv", head = T) %>%
