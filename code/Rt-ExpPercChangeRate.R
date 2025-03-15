@@ -100,11 +100,17 @@ rt_change_rate_function <- function(dataframe, change_window, weekly){
              ul_95_rt = 1/ul_95_rt)
   }
 }
+expoData <- function(data){
+  data <- data %>% 
+    filter(Date >= as.Date("2023-01-15") & Date <= as.Date("2023-10-01")) %>% 
+    select(Date, genCopiesToPMMoV) %>%
+    drop_na()
+  data$genCopiesToPMMoV <- log(data$genCopiesToPMMoV)
+  return(data)
+}
 
-dataset_Expo <- wastewater_cleaned %>% 
-  filter(Date >= as.Date("2023-01-15") & Date <= as.Date("2023-10-01")) %>% 
-  select(Date, genCopiesToPMMoV)
-dataset_Expo$genCopiesToPMMoV <- log(dataset_Expo$genCopiesToPMMoV)
+dataset_Expo <- expoData(wastewater_cleaned)
+
 
 rt_expo_1 <- rt_change_rate_function(dataset_Expo, 1, "No")
 rt_expo_1$date <- as.Date(rt_expo$date, format = "%Y-%m-%d")

@@ -33,7 +33,7 @@ find_time_shift_mle <- function(dat1, dat2, max_shift = 15) {
 }
 
 # Shift Dataset:
-# Shift the timestamps of the cleaned data first, align it and use rt_function again. Then prove by calculating the mse
+# Shift the timestamps of the cleaned data first (due to data availability), align it and use rt_function again. Then prove by calculating the mse
 shiftData <- function(data, shift){
   shifteddata <- data
   shifteddata$Date <- shifteddata$Date + shift
