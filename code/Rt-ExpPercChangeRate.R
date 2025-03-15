@@ -106,5 +106,8 @@ dataset_Expo <- wastewater_cleaned %>%
   select(Date, genCopiesToPMMoV)
 dataset_Expo$genCopiesToPMMoV <- log(dataset_Expo$genCopiesToPMMoV)
 
-rt_expo <- rt_change_rate_function(dataset_Expo, 1, "No")
-rt_expo$date <- as.Date(rt_expo$date, format = "%Y-%m-%d")
+rt_expo_1 <- rt_change_rate_function(dataset_Expo, 1, "No")
+rt_expo_1$date <- as.Date(rt_expo$date, format = "%Y-%m-%d")
+
+rt_expo_4 <- rt_change_rate_function(dataset_Expo, 4, "No")
+rt_expo_4$date <- as.Date(rt_expo$date, format = "%Y-%m-%d")

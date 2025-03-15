@@ -1,12 +1,6 @@
 # ToDos
 
-## 1 
-# -> Use another model (not EpiEstim) which is destined for wastewater data
-
-## 3
-# Build in the delays of data (zB "Melde-delay", Abwasserdelay) -> Datengetrieben:
-# Schreibe Funktion, welche eine bestimmte Metrik (gegeben eines potentiellen Delays) minimiert! 
-
+# Nutze Timeshift mit täglichen Daten!  -> Rt NICHT weekly berechnen
 
 
 
@@ -22,11 +16,14 @@
 # und schlüssige Analyse und Formulierung der Fragestellung
 
 
+# Vergleiche Werte mit eingebauten Shift, mit denen ohne eingebauten Shift + gehe auch darauf in der Arbeit ein
+
+# In Seminararbeit:
+# - Vergleiche die Estimates zwischen den Daten -> Welche bildet am besten ab
+# - Unterscheide zwischen weekly und daily daten! 
+# - Unterscheide zwischen timeshift und kein timeshift
 
 
-# Fragen Bracher
-# 1.) Bessere Methode bei MLE?
-# 2.) Sollen Werte ohne Timeshift mit denen mit Timeshift verglichen werden?
-# 2.2) Wie genau soll darauf in der Arbeit eingegangen werden? Soll beides auch jeweils geplottet werden?
-
-# 3.) Fehlersuche :) Warum wird timeshift nicht übernommen?
+# Wenn noch Zeit übrig:
+# Huismann-Methode noch Coden und verwenden
+# Huismann-syntheticvalue in EPCR einsetzen. 

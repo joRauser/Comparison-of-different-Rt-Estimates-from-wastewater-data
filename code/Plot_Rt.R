@@ -25,14 +25,14 @@ print_plot <- function(datasets){
     scale_fill_brewer(palette = "Accent") + 
     
     labs(
-      title = "Comparison of Rt-Estimates",
-      subtitle = "Means and Confidence Intervals for different data used",
-      x = "Date",
+      #title = "Comparison of Rt-Estimates",
+      #subtitle = "Means and Confidence Intervals for different data used",
+      x = "",
       y = "Rt",
-      color = "Datenquelle", 
-      fill = "Datenquelle") +
+      color = "Data source", 
+      fill = "Data source") +
     theme(
-      legend.position = "top",
+      legend.position = "bottom",
       plot.title = element_text(size = 16, face = "bold", hjust = .5),
       plot.subtitle = element_text(size = 12, hjust = .5)
     )
@@ -41,29 +41,36 @@ print_plot <- function(datasets){
   print(plot_combined)
 }
 
-
+# Figure 2: EpiEstim-calculation for different datasets 
 EpiEstim_Comparison <- print_plot(list(
   "Hospitalizations" = rt_hospitalizations,
   "Wastewater" = rt_wastewater_toPMMoV,
   "CohortStudy" = rt_cohortPos
 ))
-hospitalizations_comparison <- print_plot(list(
-  "Hospitalizations_Weekly" = rt_hospitalizations,
-  "Hospitalizations_Daily" = rt_hosp_conv
-))
 
-wwModel_comparison <- print_plot(list(
-  "WW_EpiEstim" = rt_wastewater_toPMMoV, 
-  "WW_EPCR" = rt_expo
+# Figure 3: Rt from different wastewater methods
+wwComp <- print_plot(list(
+  "WW_EPCR_1" = rt_expo_1,
+  "WW_EPCR_4" = rt_expo_4,
+  "WW_EpiEstim" = rt_wastewater_toPMMoV
 ))
-
-Model_comparison <- print_plot(list(
-  "WW_EpiEstim" = rt_wastewater_toPMMoV, 
-  "WW_EPCR" = rt_expo,
+EPCR <- print_plot(list(
+  "WW_EPCR_1" = rt_expo_1,
   "Hospitalizations" = rt_hosp_conv
 ))
+wastewater_Comp <- EPCR / wwComp
+wastewater_Comp
 
-dailyValuesEPCR <- print_plot(list(
-  "Hosp_Daily" = rt_hosp_conv, 
-  "WW_EPCR_Daily" = rt_expo
+
+hospitalizations_daily_compared <- print_plot(list(
+  "Hospitalizations_WM_Daily" = rt_hospitalizations,
+  "Hospitalizations_DEC_Daily" = rt_hosp_conv
 ))
+hospitlizations_weekly_compared <- print_plot(list(
+  "Hospitalizations_WM_Weekly" = rt_hosp_weekly,
+  "Hospitalizations_DEC_Weekly" = rt_hosp_conv_weekly
+))
+hospitalization_dailyVSweekly <- hospitalizations_daily_compared / hospitlizations_weekly_compared
+hospitalization_dailyVSweekly
+
+

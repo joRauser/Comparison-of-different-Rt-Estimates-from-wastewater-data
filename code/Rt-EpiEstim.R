@@ -135,20 +135,20 @@ rt_unknown_si <- function(dataframe, weekly){
   }
 }
 
-### Gold Standard:
-rt_hospitalizations <- rt_unknown_si(hospitalizations_aligned, "Yes")
+### Gold Standard: Daily:
+rt_hospitalizations <- rt_unknown_si(hospitalizations_aligned, "No")
 rt_hosp_conv <- rt_unknown_si(hosp_conv_aligned, "No")
-
+# Weekly:
+rt_hosp_weekly <- rt_unknown_si(hospitalizations_aligned, "Yes")
+rt_hosp_conv_weekly <- rt_unknown_si(hosp_conv_aligned, "Yes")
 
 ### CohortStudy
-rt_cohortstudy <- rt_unknown_si(cohort_aligned, "Yes")
-rt_cohortInf <- rt_unknown_si(cohortInfRate_aligned, "Yes")
-rt_cohortPos <- rt_unknown_si(cohortPosTest_aligned, "Yes")
+rt_cohortPos <- rt_unknown_si(cohortPosTest_aligned, "No")
 
 
 ### Wastewater:
 ## Direct substitution:
 # Incidence = Virus to PMMoV:
-rt_wastewater_toPMMoV <- rt_unknown_si(wastewater_toPMMoV, "Yes")
+rt_wastewater_toPMMoV <- rt_unknown_si(wastewater_toPMMoV, "No")
 
 

@@ -42,13 +42,13 @@ wastewater_cleaned <- wastewater_raw %>%
             genCopiesToPMMoV = sum(Anteil.Genkopien.Durchschnitt.zu.PMMoV.x100.000, na.rm = TRUE))%>%
   mutate(genCopiesN1_N2 = genCopiesN1 + genCopiesN2) %>%
   select(-genCopiesN1, -genCopiesN2)
+# Ensure date-format = Date
 wastewater_cleaned$Date <- as.Date(wastewater_cleaned$Date, format = "%Y-%m-%d")
 
 
 ## Hospitalization-data
 hospitalizations_cleaned <- hospitalizations_raw %>%
   select(-Altersgruppe, -Bundesland_Id) %>% 
-  # summarize per Date
   group_by(Date) %>% 
   summarise(Fallzahlen = sum(X7T_Hospitalisierung_Faelle, na.rm = TRUE))
 hospitalizations_cleaned$Date <- as.Date(hospitalizations_cleaned$Date, format = "%Y-%m-%d")
@@ -84,7 +84,7 @@ cohortPosTest <- cohort_cleaned %>%
 alignTimespan <- function(df){
   colnames(df)[2] <- "case_data"
   df <- df %>%
-    filter(Date >= as.Date("2023-01-15") & Date <= as.Date("2023-10-01")) %>%
+    filter(Date >= as.Date("2023-01-15") & Date <= as.Date("2023-10-11")) %>%
     # fill in missing dates
     complete(Date = seq.Date(min(Date), max(Date), by = "day")) %>%
     # interpolate missing values
@@ -94,6 +94,7 @@ alignTimespan <- function(df){
 }
 
 hospitalizations_aligned <- alignTimespan(hospitalizations_cleaned)
+# Bcs deconvoluted data are already daily, the alignTimespan-function only filters by date for this dataset
 hosp_conv_aligned <- alignTimespan(hospitalizations_deconvoluted_cleaned)
 
 

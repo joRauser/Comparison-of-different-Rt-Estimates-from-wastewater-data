@@ -45,3 +45,21 @@ combined_dataset <- merge(rt_hosp_conv, rt_expo, by = "date") %>%
   drop_na()
 mse(combined_dataset$mean_rt.x, combined_dataset$mean_rt.y)
 mae(combined_dataset$mean_rt.x, combined_dataset$mean_rt.y)
+
+
+
+# Difference of rt_hospitalizations from weekly to daily measures
+hosp_daily_weekly_conv <- merge(rt_hosp_conv, rt_hosp_conv_weekly, by = "date")%>%
+  drop_na()
+mse(hosp_daily_weekly_conv$mean_rt.x, hosp_daily_weekly_conv$mean_rt.y)
+hosp_daily_weekly <- merge(rt_hospitalizations, rt_hosp_weekly, by = "date")%>%
+  drop_na()
+mse(hosp_daily_weekly$mean_rt.x, hosp_daily_weekly$mean_rt.y)
+
+# Difference between Deconvoluted and Interpolated data:
+hosp_conv_ip_daily <- merge(rt_hosp_conv, rt_hospitalizations, by = "date")%>%
+  drop_na()
+mse(hosp_conv_ip_daily$mean_rt.x, hosp_conv_ip_daily$mean_rt.y)
+hosp_conv_ip_weekly <- merge(rt_hosp_conv_weekly, rt_hosp_weekly, by = "date")%>%
+  drop_na()
+mse(hosp_conv_ip_weekly$mean_rt.x, hosp_conv_ip_weekly$mean_rt.y)
