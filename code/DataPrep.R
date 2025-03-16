@@ -1,6 +1,6 @@
 library(tidyverse)
 library(zoo)
-setwd("/Users/jonasrauser/Desktop/R/Comparison-of-different-Rt-Estimates-from-wastewater-data/rawData")
+setwd("")
 
 
 ### Load Data
@@ -16,7 +16,6 @@ wastewater_raw <- read.csv("completeData_RLP.csv", header = T, sep = ";")%>%
 hospitalizations_raw <- read.csv("Hospitalisierungen.csv", header = T, sep = ",")%>%
   filter(Bundesland == "Rheinland-Pfalz")%>%
   rename(Date = Datum)
-# https://zenodo.org/records/14997838
 
 # daily hospitalization incidence
 hospitalzations_deconvoluted <- read.csv("hospitalization_deconvoluted.csv", head = T) %>%
@@ -60,6 +59,7 @@ hospitalizations_deconvoluted_cleaned <- hospitalzations_deconvoluted %>%
   summarise(Hospitalizations = sum(value, na.rm = TRUE))
 hospitalizations_deconvoluted_cleaned$Date <- as.Date(hospitalizations_deconvoluted_cleaned$Date, format = "%Y-%m-%d")
 
+
 ## SentiSurv-data
 cohort_cleaned <- cohort_raw %>%
   select(-Town,-Study.phase) %>%
@@ -70,14 +70,10 @@ cohort_cleaned <- cohort_raw %>%
   mutate(infectiousRate = (Positive.test + Newly.positive.test)/Valid.test)
 cohort_cleaned$Date <- as.Date(cohort_cleaned$Date, format = "%Y-%m-%d")
 
-
-# Try different features of cohortStudy, to infere for Rt:
-cohortInfRate <- cohort_cleaned %>%
-  select(Date, infectiousRate)
-
 cohortPosTest <- cohort_cleaned %>%
   mutate(positiveTests = Positive.test + Newly.positive.test) %>%
   select(Date, positiveTests)
+
 
 
 ##### Function to set time-span on all datasets (is the maximal timespan, where data is available on every dataset)
@@ -102,6 +98,4 @@ wastewater_aligned <- alignTimespan(wastewater_cleaned)
 wastewater_toPMMoV <- alignTimespan(wastewater_cleaned %>%
                                       select(Date, genCopiesToPMMoV))
 
-cohort_aligned <- alignTimespan(cohort_cleaned)
-cohortInfRate_aligned <- alignTimespan(cohortInfRate)
 cohortPosTest_aligned <- alignTimespan(cohortPosTest)
