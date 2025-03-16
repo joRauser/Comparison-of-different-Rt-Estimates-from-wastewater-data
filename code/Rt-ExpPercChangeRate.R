@@ -100,6 +100,7 @@ rt_change_rate_function <- function(dataframe, change_window, weekly){
              ul_95_rt = 1/ul_95_rt)
   }
 }
+# Prep data for EPCR
 expoData <- function(data){
   data <- data %>% 
     filter(Date >= as.Date("2023-01-15") & Date <= as.Date("2023-10-01")) %>% 
@@ -109,11 +110,11 @@ expoData <- function(data){
   return(data)
 }
 
-dataset_Expo <- expoData(wastewater_cleaned)
+dataset_expo <- expoData(wastewater_cleaned)
 
 
-rt_expo_1 <- rt_change_rate_function(dataset_Expo, 1, "No")
+rt_expo_1 <- rt_change_rate_function(dataset_expo, 1, "No")
 rt_expo_1$date <- as.Date(rt_expo$date, format = "%Y-%m-%d")
 
-rt_expo_4 <- rt_change_rate_function(dataset_Expo, 4, "No")
+rt_expo_4 <- rt_change_rate_function(dataset_expo, 4, "No")
 rt_expo_4$date <- as.Date(rt_expo$date, format = "%Y-%m-%d")
