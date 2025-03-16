@@ -1,4 +1,6 @@
-# Shift the timestamps of the cleaned data first (due to data availability), align it and use rt_function again. Then prove by calculating the mse
+# Shift Dataset:
+# Shift the timestamps of the cleaned data first (due to data availability).
+# Align afterwards and use rt_function again. To conclude, prove by calculating evaluation-metrics.
 shiftData <- function(data, shift, method, change_window){
   # Apply all steps for Data-Prepping on the data, after applying the timeshift
   shifteddata <- data
@@ -10,9 +12,9 @@ shiftData <- function(data, shift, method, change_window){
     shifteddata <- expoData(shifteddata)
     rt_shifteddata <- rt_change_rate_function(shifteddata, change_window, "No")
   }
- 
   return(rt_shifteddata)
 }
+
 # Estimate shifted Rt's
 rt_wastewater_toPMMoV_SHIFTED <- shiftData(wastewater_cleaned%>%
                                              select(Date, genCopiesToPMMoV),
@@ -22,9 +24,7 @@ rt_expo_1_SHIFTED <- shiftData(dataset_Expo%>%
                                -4, "EPCR", 1)
 rt_cohortPos_SHIFTED <- shiftData(cohortPosTest, 6, "EpiEstim")
 
-# Plot the Timeshifted data
-
-# Figure 5: Rt-calculation for timeshifted datasets 
+# Plot timeshifted data, Figure 5: Rt-calculation for timeshifted datasets 
 afterTimeshift <- print_plot(list(
   "Hospitalizations" = rt_hosp_conv,
   "Wastewater EpiEstim" = rt_wastewater_toPMMoV_SHIFTED,
