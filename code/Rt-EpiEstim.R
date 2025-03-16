@@ -1,4 +1,3 @@
-# Test all the necessary Models with the data
 library(EpiEstim)
 library(zoo)
 
@@ -19,21 +18,14 @@ rt_unknown_si <- function(dataframe, weekly){
     serial_interval <- make_config(
       incid = dataframe$I,
       method = c("uncertain_si"),
-     # mean_si = 4,
       mean_si = 5,
-     # std_si = 1,
       std_si = 3,
-    #  std_mean_si = 1,
       std_mean_si = 1,
-     # min_mean_si = 1,
-     # max_mean_si = 7,
       min_mean_si = 3,
       max_mean_si = 7,
       std_std_si = 1,
-     # min_std_si = .1,
-     # max_std_si = 1.9,
-       min_std_si = 1,
-       max_std_si = 5,
+      min_std_si = 1,
+      max_std_si = 5,
       t_start = t_start,
       t_end = t_end
     )
@@ -145,10 +137,6 @@ rt_hosp_conv_weekly <- rt_unknown_si(hosp_conv_aligned, "Yes")
 ### CohortStudy
 rt_cohortPos <- rt_unknown_si(cohortPosTest_aligned, "No")
 
-
 ### Wastewater:
-## Direct substitution:
-# Incidence = Virus to PMMoV:
+## Direct substitution (Incidence = Virus to PMMoV):
 rt_wastewater_toPMMoV <- rt_unknown_si(wastewater_toPMMoV, "No")
-
-
