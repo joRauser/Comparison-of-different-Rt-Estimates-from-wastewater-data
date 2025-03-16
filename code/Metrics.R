@@ -9,7 +9,7 @@ mse <- function(goldSt, predictor) {
 # get percentage of values which are both higher 1 and lower 1:
 tendency_check <- function(rt_1, rt_2){
   # Zusammenführen der Datensätze auf Basis der Spalte "Date"
-  merged_data <- merge(rt_1, rt_2, by = "date", suffixes = c("_1", "_2"))
+  merged_data <- merge(rt_1, rt_2, by = "date", suffixes = c("_1", "_2")) %>% drop_na()
   
   # Überprüfung, ob beide Rt-Werte über 1 oder unter 1 liegen
   both_above_or_below_one <- with(merged_data, (mean_rt_1 > 1 & mean_rt_2 > 1) | (mean_rt_1 < 1 & mean_rt_2 < 1))
@@ -21,30 +21,32 @@ tendency_check <- function(rt_1, rt_2){
   return(percentage)
 }
 
+evalMetrics <- function(rt1, rt2){
+  combined_dataset <- merge(rt1, rt2, by = "date") %>%
+    drop_na()
+  mse <- mse(combined_dataset$mean_rt.x, combined_dataset$mean_rt.y)
+  mae <- mae(combined_dataset$mean_rt.x, combined_dataset$mean_rt.y)
+  em1 <- tendency_check(rt1, rt2)
+  cat("MSE: ", mse , "MAE: ", mae, "EM1: ", em1, "%")
+}
 
 
-### BEFORE TIMESHIFT-ADJUSTMENT
-rt_hospitalizations <- rt_hospitalizations[-1,] # bring rt's to same length
-mae(rt_hospitalizations[-1,]$mean_rt, rt_cohortPos$mean_rt)
-# .1926251
-mse(rt_hospitalizations[-1,]$mean_rt, rt_cohortPos$mean_rt)
-# .07734484
 
-mae(rt_hospitalizations$mean_rt, rt_wastewater_toPMMoV$mean_rt)
-# .2381259
-mse(rt_hospitalizations$mean_rt, rt_wastewater_toPMMoV$mean_rt)
-# .1043689
+### WITHOUT TIMESHIFT-ADJUSTMENT
+evalMetrics(rt_hosp_conv, rt_wastewater_toPMMoV)
+evalMetrics(rt_hosp_conv, rt_expo_1)
+evalMetrics(rt_hosp_conv, rt_expo_4)
+evalMetrics(rt_hosp_conv, rt_cohortPos)
 
-tendency_check(rt_hospitalizations, rt_cohortPos)
-# 86,11%
-tendency_check(rt_hospitalizations, rt_wastewater_toPMMoV)
-# 67,57%
+### WITH TIMESHIFT-ADJUSTMENT
+evalMetrics(rt_hosp_conv, rt_wastewater_toPMMoV_SHIFTED)
+evalMetrics(rt_hosp_conv, rt_expo_1_SHIFTED)
+evalMetrics(rt_hosp_conv, rt_expo_4_SHIFTED)
+evalMetrics(rt_hosp_conv, rt_cohortPos_SHIFTED)
 
 
-combined_dataset <- merge(rt_hosp_conv, rt_expo, by = "date") %>%
-  drop_na()
-mse(combined_dataset$mean_rt.x, combined_dataset$mean_rt.y)
-mae(combined_dataset$mean_rt.x, combined_dataset$mean_rt.y)
+
+
 
 
 
