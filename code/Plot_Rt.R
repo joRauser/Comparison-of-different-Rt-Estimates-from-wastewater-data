@@ -27,7 +27,7 @@ print_plot <- function(datasets){
     labs(
       #title = "Comparison of Rt-Estimates",
       #subtitle = "Means and Confidence Intervals for different data used",
-      x = "",
+      x = "", #"Date"
       y = "Rt",
       color = "Data source", 
       fill = "Data source") +
@@ -61,7 +61,7 @@ EPCR <- print_plot(list(
 wastewater_Comp <- EPCR / wwComp
 wastewater_Comp
 
-
+# Figure 4: Daily vs Weekly Hospitalizations comparison
 hospitalizations_daily_compared <- print_plot(list(
   "Hospitalizations_WM_Daily" = rt_hospitalizations,
   "Hospitalizations_DEC_Daily" = rt_hosp_conv
@@ -72,5 +72,3 @@ hospitlizations_weekly_compared <- print_plot(list(
 ))
 hospitalization_dailyVSweekly <- hospitalizations_daily_compared / hospitlizations_weekly_compared
 hospitalization_dailyVSweekly
-
-
