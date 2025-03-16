@@ -6,13 +6,13 @@ mse <- function(goldSt, predictor) {
 neg_log_likelihood <- function(shift, dat1, dat2) {
   shift <- round(shift) # shift only in full days
   if (shift < 0) {
-    # neg shift: Kürze am Anfang von dat1 und Ende von dat2
+    # neg shift
     shifted_mse <- mse(dat1, dat2[(-shift + 1):length(dat2)])
   } else if (shift > 0) {
-    # pos shift: Kürze am Ende von dat1 und Anfang von dat2
+    # pos shift
     shifted_mse <- mse(dat1, dat2[1:(length(dat2) - shift)])
   } else {
-    # Keine Verschiebung
+    # no shift
     shifted_mse <- mse(dat1, dat2)
   }
   return(shifted_mse)
@@ -32,15 +32,8 @@ find_time_shift_mle <- function(dat1, dat2, max_shift = 15) {
   return(list(best_shift = round(result$par), best_mse = result$value))
 }
 
-# Shift Dataset:
-# Shift the timestamps of the cleaned data first (due to data availability), align it and use rt_function again. Then prove by calculating the mse
-shiftData <- function(data, shift){
-  shifteddata <- data
-  shifteddata$Date <- shifteddata$Date + shift
-  return(shifteddata)
-}
 
-
+# Application of "timeshift-detector"
 
 ### Interpolated and daily
 result <- find_time_shift_mle((merge(rt_hospitalizations, rt_wastewater_toPMMoV, by = "date")%>%drop_na())$mean_rt.x, 
